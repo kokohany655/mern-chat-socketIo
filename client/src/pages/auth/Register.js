@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import logoProfile from "../../images/logo-profile.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import uploadFile from "../../components/Layout/uploadingImage";
+import { toast } from "react-hot-toast";
+import baseUrl from "../../api/baseUrl";
 const Register = () => {
+  const navigate = useNavigate();
+
   const [img, setImg] = useState(logoProfile);
   const [data, setData] = useState({
     name: "",
@@ -9,6 +14,24 @@ const Register = () => {
     password: "",
     pic: "",
   });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const dataImage = await uploadFile(data.pic);
+
+      const updatedData = {
+        ...data,
+        pic: dataImage?.data?.url,
+      };
+      const response = await baseUrl.post("/api/v1/auth/signup", updatedData);
+      toast.success(response?.data?.message);
+      navigate("/login");
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,14 +52,14 @@ const Register = () => {
       });
     }
   };
-  console.log({ data });
+
   return (
     <div className=" w-full flex justify-center items-center px-2">
       <div className=" p-4 shadow-md rounded-md md:w-[30%] w-full">
         <div className=" text-xl font-semibold w-full flex justify-center items-center mb-6">
           welcome to chat app!
         </div>
-        <form className=" flex flex-col gap-3">
+        <form className=" flex flex-col gap-3" onSubmit={handleSubmit}>
           <label htmlFor="pic" className="flex flex-col gap-3">
             Photo
             <img
