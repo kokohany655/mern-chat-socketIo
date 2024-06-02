@@ -8,8 +8,11 @@ exports.auth = (req, res, next) => {
   }
 
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
-  if (req.params.id !== decoded.id) {
-    throw new ApiError("You are not have access to do this action", 403);
+  if (req.params.id) {
+    if (req.params.id !== decoded.id) {
+      throw new ApiError("You are not have access to do this action", 403);
+    }
   }
+  req.user = decoded.id;
   next();
 };

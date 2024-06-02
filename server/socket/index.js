@@ -29,18 +29,20 @@ io.on("connection", (socket) => {
   socket.join(userId);
   onlineUser.add(userId);
 
-  socket.emit("onlineUser", Array.from(onlineUser));
+  io.emit("onlineUser", Array.from(onlineUser));
+
   socket.on("message-page", async (userID) => {
     const user = await User.findById(userID).select("name email pic").lean();
 
     const payload = {
       ...user,
-      online: onlineUser.has(userId),
     };
     socket.emit("message-user", payload);
   });
-  io.on("disconnect", () => {
+
+  socket.on("disconnect", () => {
     onlineUser.delete(userId);
+    io.emit("onlineUser", Array.from(onlineUser));
     console.log("disconnect user", socket.id);
   });
 });

@@ -88,7 +88,7 @@ exports.deleteUser = async (req, res, next) => {
 
 exports.searchUser = async (req, res, next) => {
   try {
-    const id = getIdUserFromToken(req.cookies.token);
+    const id = req.user;
 
     const { search } = req.body;
     const query = {};

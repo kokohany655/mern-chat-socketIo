@@ -87,9 +87,7 @@ exports.getIdUserFromToken = (token) => {
 
 exports.getLoggedUser = async (req, res, next) => {
   try {
-    const token = req?.cookies?.token;
-
-    const id = exports.getIdUserFromToken(token);
+    const id = req.user;
     const user = await User.findById(id).select("-password");
 
     if (!user) {

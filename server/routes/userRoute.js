@@ -11,13 +11,11 @@ const { auth } = require("../middleware/AuthMiddleWare");
 
 const router = express.Router();
 
+router.use(auth);
+
 router.route("/").get(getAllUsers).post(createUser);
 
-router
-  .route("/:id")
-  .get(getOneUser)
-  .put(auth, updateUser)
-  .delete(auth, deleteUser);
+router.route("/:id").get(getOneUser).put(updateUser).delete(deleteUser);
 
 router.route("/search-user").post(searchUser);
 
