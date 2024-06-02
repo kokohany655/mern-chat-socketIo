@@ -55,7 +55,7 @@ const Home = () => {
   const isRootPath = location.pathname === "/";
 
   return (
-    <div className="grid lg:grid-cols-[300px,1fr] h-screen max-h-screen gap-4">
+    <div className="grid lg:grid-cols-[300px,1fr] h-screen max-h-">
       <section
         className={`rounded-tr-xl rounded-br-xl shadow-xl ${
           !isRootPath ? "hidden" : ""

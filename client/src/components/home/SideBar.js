@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 
 import logo from "../../images/logo.png";
 import SearchUser from "../user/SearchUser";
+import { io } from "socket.io-client";
 
 const SideBar = ({ user }) => {
   const navigate = useNavigate();

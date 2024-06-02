@@ -22,8 +22,12 @@ const Avatar = ({ userId, name, imageUrl, showOnline }) => {
         <PiUserCircle />
       )}
 
-      {showOnline && isOnline && (
-        <div className="bg-[green] p-1 absolute bottom-1 right-1 z-10 rounded-full"></div>
+      {showOnline && (
+        <div
+          className={`${
+            isOnline ? "bg-[green]" : "bg-[gray]"
+          } p-1 absolute bottom-1 right-1 z-10 rounded-full`}
+        ></div>
       )}
     </div>
   );
