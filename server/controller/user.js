@@ -1,5 +1,6 @@
 const { User } = require("../models/UserModel");
 const ApiError = require("../utils/ApiError");
+const { getIdUserFromToken } = require("./auth");
 
 exports.getAllUsers = async (req, res, next) => {
   try {
@@ -62,7 +63,7 @@ exports.updateUser = async (req, res, next) => {
       new: true,
     });
     res.status(200).json({
-      message: "success",
+      message: " Updated successfully",
       data: updateUser,
     });
   } catch (error) {
@@ -79,6 +80,25 @@ exports.deleteUser = async (req, res, next) => {
     const deleteUser = await User.findByIdAndDelete(req.params.id);
     res.status(200).json({
       message: "deleted successfully",
+    });
+  } catch (error) {
+    return next(new ApiError(`${error.message}`, 400));
+  }
+};
+
+exports.searchUser = async (req, res, next) => {
+  try {
+    const id = getIdUserFromToken(req.cookies.token);
+
+    const { search } = req.body;
+    const query = {};
+    query.$or = [{ email: { $regex: search, $options: "i" } }];
+
+    const user = await User.find(query).select("name pic email");
+    const allUser = user.filter((e) => e._id != id);
+    res.status(200).json({
+      data: allUser,
+      success: true,
     });
   } catch (error) {
     return next(new ApiError(`${error.message}`, 400));

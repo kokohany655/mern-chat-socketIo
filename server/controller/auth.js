@@ -1,38 +1,39 @@
 const { User } = require("../models/UserModel");
-const ApiError = require("../utils/ApiError");
-const APiError = require("../utils/ApiError");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const ApiError = require("../utils/ApiError");
 
 exports.signup = async (req, res, next) => {
   try {
     const { name, email, password, pic } = req.body;
 
-    const checkUser = await User.findOne({ email });
-    if (checkUser) {
-      return next(new APiError("this user is already exist", 400));
+    // Validate input data
+    if (!name || !email || !password) {
+      return next(new ApiError("Name, email, and password are required", 400));
+    }
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return next(new ApiError("User already exists", 400));
     }
 
     const salt = await bcrypt.genSalt(10);
-    const hashPassword = await bcrypt.hash(password, salt);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-    const payload = {
+    const newUser = new User({
       name,
       email,
+      password: hashedPassword,
       pic,
-      password: hashPassword,
-    };
-
-    const user = new User(payload);
-
-    await user.save();
+    });
+    await newUser.save();
 
     res.status(201).json({
-      message: "created account successfully go to login",
-      data: user,
+      message: "Account created successfully. Proceed to login.",
+      data: newUser,
     });
   } catch (error) {
-    return next(new ApiError(`${error.message}`, 400));
+    next(error);
   }
 };
 
@@ -40,72 +41,76 @@ exports.login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    // Find user by email
     const user = await User.findOne({ email });
-
     if (!user) {
-      return next(new APiError("Incorrect email or password", 400));
+      return next(new ApiError("Incorrect email or password", 401));
     }
 
-    // Check if password is correct
-    const isCorrectPassword = await bcrypt.compare(password, user.password);
-
-    if (!isCorrectPassword) {
-      return next(new APiError("Incorrect email or password", 400));
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return next(new ApiError("Incorrect email or password", 401));
     }
 
-    // Generate JWT token
     const token = jwt.sign(
       { id: user._id, email: user.email },
       process.env.JWT_SECRET,
-      {
-        expiresIn: process.env.JWT_EXPIRES_IN,
-      }
+      { expiresIn: process.env.JWT_EXPIRES_IN }
     );
 
-    // Send response
     res
-      .cookie("token", token, { httpOnly: true, secure: true })
+      .cookie("token", token, { httpOnly: false, secure: false })
       .status(200)
       .json({
-        message: "Login Successfully",
-        data: user,
+        message: "Login successful",
         token,
+        user: {
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          pic: user.pic,
+        },
       });
   } catch (error) {
-    return next(new ApiError(`${error.message}`, 400));
+    next(error);
   }
+};
+
+exports.getIdUserFromToken = (token) => {
+  if (!token) {
+    return next(new ApiError("Token not found", 401));
+  }
+
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+  return decoded.id;
 };
 
 exports.getLoggedUser = async (req, res, next) => {
   try {
-    const { token } = req.cookies;
+    const token = req?.cookies?.token;
 
-    if (!token) {
-      return next(new ApiError("Token expired", 400));
+    const id = exports.getIdUserFromToken(token);
+    const user = await User.findById(id).select("-password");
+
+    if (!user) {
+      return next(new ApiError("User not found", 404));
     }
 
-    // Assuming token is in the format "Bearer <token>"
-
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    const user = await User.findById(decoded.id).select("-password");
-
     res.status(200).json({
-      message: "success",
+      message: "Success",
       data: user,
     });
   } catch (error) {
-    return next(new ApiError(`${error.message}`, 400));
+    next(error);
   }
 };
 
 exports.logout = async (req, res, next) => {
   try {
-    res.cookie("token", "", { httpOnly: true, secure: true }).status(200).json({
-      message: "Logout Successfully",
+    res.clearCookie("token").status(200).json({
+      message: "Logout successful",
     });
   } catch (error) {
-    return next(new ApiError(`${error.message}`, 400));
+    next(error);
   }
 };

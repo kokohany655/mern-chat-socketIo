@@ -9,8 +9,10 @@ const { globalError } = require("./middleware/globalError");
 const authRoute = require("./routes/authRoute");
 const userRoute = require("./routes/userRoute");
 
+const { app, server } = require("./socket/index");
+
 dotenv.config();
-const app = express();
+// const app = express();
 app.use(express.json());
 app.use(
   cors({
@@ -28,6 +30,6 @@ app.use("/api/v1/user", userRoute);
 app.use(globalError);
 const port = process.env.PORT || 8000;
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`server is running ... ${port}`);
 });

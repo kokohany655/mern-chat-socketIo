@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import logoProfile from "../../images/logo-profile.png";
 import { Link, useNavigate } from "react-router-dom";
 import uploadFile from "../../components/Layout/uploadingImage";
@@ -6,7 +6,6 @@ import { toast } from "react-hot-toast";
 import baseUrl from "../../api/baseUrl";
 const Register = () => {
   const navigate = useNavigate();
-
   const [img, setImg] = useState(logoProfile);
   const [data, setData] = useState({
     name: "",
@@ -69,6 +68,7 @@ const Register = () => {
             />
           </label>
           <input
+            required
             type="file"
             id="pic"
             name="pic"
@@ -78,6 +78,7 @@ const Register = () => {
           />
           <label htmlFor="name">Name</label>
           <input
+            required
             type="text"
             id="name"
             name="name"
@@ -87,6 +88,7 @@ const Register = () => {
           />
           <label htmlFor="email">Email</label>
           <input
+            required
             type="email"
             id="email"
             name="email"
@@ -96,6 +98,7 @@ const Register = () => {
           />
           <label htmlFor="password">password</label>
           <input
+            required
             type="password"
             id="password"
             name="password"

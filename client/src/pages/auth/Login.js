@@ -17,6 +17,7 @@ const Login = () => {
       };
       const response = await baseUrl.post("/api/v1/auth/login", data, config);
       toast.success(response?.data?.message);
+      localStorage.setItem("token-chat-forge", response?.data?.token);
       navigate("/");
     } catch (error) {
       toast.error(error?.response?.data?.message);

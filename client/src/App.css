@@ -1,0 +1,13 @@
+.slideBar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.slideBar::-webkit-scrollbar-track {
+  color: white;
+}
+
+.slideBar::-webkit-scrollbar-thumb {
+  @apply h-2;
+  @apply bg-[#b1b6e4];
+  @apply rounded-full;
+}
