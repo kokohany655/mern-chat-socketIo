@@ -14,6 +14,7 @@ const { app, server } = require("./socket/index");
 dotenv.config();
 // const app = express();
 app.use(express.json());
+app.use(cookie());
 app.use(
   cors({
     origin: process.env.FRONTEND_URL,
@@ -23,7 +24,6 @@ app.use(
 
 dbConnections();
 
-app.use(cookie());
 app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/user", userRoute);
 
