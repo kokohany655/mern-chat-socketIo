@@ -6,6 +6,11 @@ const messageSchema = new mongoose.Schema(
     imageUrl: String,
     videoUrl: String,
     seen: Boolean,
+    sender: {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
+      required: true,
+    },
   },
   {
     timestamps: true,

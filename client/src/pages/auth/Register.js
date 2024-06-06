@@ -19,14 +19,15 @@ const Register = () => {
 
     try {
       const dataImage = await uploadFile(data.pic);
-
-      const updatedData = {
-        ...data,
-        pic: dataImage?.data?.url,
-      };
-      const response = await baseUrl.post("/api/v1/auth/signup", updatedData);
-      toast.success(response?.data?.message);
-      navigate("/login");
+      if (dataImage.url) {
+        const updatedData = {
+          ...data,
+          pic: dataImage?.data?.url,
+        };
+        const response = await baseUrl.post("/api/v1/auth/signup", updatedData);
+        toast.success(response?.data?.message);
+        navigate("/login");
+      }
     } catch (error) {
       toast.error(error?.response?.data?.message);
     }

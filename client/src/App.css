@@ -11,3 +11,13 @@
   @apply bg-[#b1b6e4];
   @apply rounded-full;
 }
+
+.emoji em-emoji-picker {
+  width: 100% !important;
+  height: 17rem !important;
+}
+
+.emoji em-emoji-picker section {
+  width: 100% !important;
+  height: 17rem !important;
+}

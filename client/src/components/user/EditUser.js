@@ -56,18 +56,28 @@ const EditUser = ({ setIsModalOpen, isModalOpen, user }) => {
           ...data,
           pic: dataImage?.data?.url,
         };
+        const response = await baseUrl.put(
+          `/api/v1/user/${user._id}`,
+          updatedData,
+          {
+            withCredentials: true,
+          }
+        );
+        toast.success(response?.data?.message);
+
+        dispatch(setUser(response?.data?.data));
+      } else {
+        const response = await baseUrl.put(
+          `/api/v1/user/${user._id}`,
+          updatedData,
+          {
+            withCredentials: true,
+          }
+        );
+        toast.success(response?.data?.message);
+
+        dispatch(setUser(response?.data?.data));
       }
-
-      const response = await baseUrl.put(
-        `/api/v1/user/${user._id}`,
-        updatedData,
-        {
-          withCredentials: true,
-        }
-      );
-      toast.success(response?.data?.message);
-
-      dispatch(setUser(response?.data?.data));
     } catch (error) {
       toast.error(error?.response?.data?.message);
     }

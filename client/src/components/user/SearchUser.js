@@ -75,7 +75,11 @@ const SearchUser = ({ setIsSearchModalOpen, isSearchModalOpen }) => {
         ) : (
           <div className=" w-full slideBar h-80 overflow-x-hidden overflow-y-auto px-2">
             {searchUser.map((e) => (
-              <CardUser key={e._id} user={e} />
+              <CardUser
+                key={e._id}
+                user={e}
+                setIsSearchModalOpen={setIsSearchModalOpen}
+              />
             ))}
           </div>
         )}
