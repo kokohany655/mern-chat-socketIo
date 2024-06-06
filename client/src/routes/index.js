@@ -1,18 +1,15 @@
-import { createBrowserRouter, Navigate } from "react-router-dom";
 import Layout from "../components/Layout/Layout";
-import App from "../App";
-import Register from "../pages/auth/Register";
-import Login from "../pages/auth/Login";
-import Home from "../pages/home/Home";
 import Chat from "../pages/chat/Chat";
+
+const { createBrowserRouter } = require("react-router-dom");
+const { default: App } = require("../App");
+const { default: Register } = require("../pages/auth/Register");
+const { default: Login } = require("../pages/auth/Login");
+const { default: Home } = require("../pages/home/Home");
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Navigate to="/login" replace={true} />, // Redirect to login by default
-  },
-  {
-    path: "/app",
     element: <App />,
     children: [
       {
