@@ -6,8 +6,6 @@ import Avatar from "./Avatar";
 
 import EditUser from "../user/EditUser";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../../redux/reducer/userSlice";
-import baseUrl from "../../api/baseUrl";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -20,11 +18,12 @@ const SideBar = () => {
   const user = useSelector((state) => state.user);
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [allUser, setAllUser] = useState([]);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 const socketRef = useRef(null)
+
+  
   useEffect(() => {
     if (!socketRef.current) {
       socketRef.current = io(process.env.REACT_APP_BACKEND_API, {
@@ -35,6 +34,9 @@ const socketRef = useRef(null)
       if (user?._id) {
         socketRef.current.emit("sideBar", user._id);
       }
+
+      
+      
 
       socketRef.current.on("conversation-sidBar" , (data)=>{
        const conversationUserDate = data.map(conv=>{

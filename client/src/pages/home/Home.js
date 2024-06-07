@@ -8,8 +8,10 @@ import SideBar from "../../components/home/SideBar";
 import logo from "../../images/logo.png";
 import io from "socket.io-client";
 
+
 const Home = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
+
   const location = useLocation();
   const dispatch = useDispatch();
   const socketRef = useRef(null);
@@ -58,24 +60,27 @@ const Home = () => {
     return null; // or loading indicator, or redirect to login
   }
 
+
+  const isRootPath = location.pathname === "/";
+
   return (
     <div className="grid lg:grid-cols-[300px,1fr] h-screen max-h-">
       <section
         className={`rounded-tr-xl rounded-br-xl shadow-xl ${
-          location.pathname === "/" ? "" : "hidden"
+          !isRootPath ? "hidden" : ""
         } lg:block `}
       >
         <SideBar />
       </section>
-      <section className={`${location.pathname === "/" ? "hidden" : "block"} `}>
+      <section className={`${isRootPath ? "hidden" : "block"} `}>
         <Outlet />
       </section>
       <div
         className={`justify-center items-center ${
-          location.pathname === "/" ? "hidden" : "lg:flex lg:flex-col hidden"
+          !isRootPath ? "hidden" : "lg:flex lg:flex-col hidden"
         } `}
       >
-        <img src={logo} alt="logo" />
+        <img src={logo} />
         <div>select user to send a message</div>
       </div>
     </div>

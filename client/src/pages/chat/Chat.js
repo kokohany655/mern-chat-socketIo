@@ -20,7 +20,7 @@ const Chat = () => {
   const [userData, setUserData] = useState();
   const [allMessage, setAllMessage] = useState([])
   const currentMessage = useRef(null)
-
+  const [allUser, setAllUser] = useState([])
 
   const param = useParams();
   const socketRef = useRef(null);
@@ -101,10 +101,46 @@ return
   };
 
   useEffect(() => {
+
+    if (!socketRef.current) {
+      socketRef.current = io(process.env.REACT_APP_BACKEND_API, {
+        auth: { token: localStorage.getItem("token-chat-forge") },
+        withCredentials: true,
+      });
+    }
     if(currentMessage?.current){
       currentMessage.current.scrollIntoView({behavior:"smooth" , block:"end"})
     }
 
+ 
+    socketRef.current.on("conversation-sidBar" , (data)=>{
+      const conversationUserDate = data.map(conv=>{
+       if(conv?.sender?._id === currentUser._id){
+         return {
+           ...conv,
+           userDetails : conv?.receiver
+         }
+       }else{
+         return {
+           ...conv,
+           userDetails : conv?.sender
+         }
+       }
+      })
+
+      setAllUser(conversationUserDate)
+    })
+    console.log({allUser})
+    if(param.userId){
+
+      const chooseConversation = allUser.filter(e=> e?.receiver?._id === param.userId )
+      console.log({chooseConversation})
+      if(chooseConversation.length > 0){
+
+        socketRef.current.emit("seen" , param.userId)
+      }
+     
+    }  
   }, [allMessage])
   
   useEffect(() => {
@@ -114,6 +150,7 @@ return
     }
   }, [])
   
+
 
   useEffect(() => {
     if (!socketRef.current) {
@@ -148,6 +185,7 @@ return
       }
     };
   }, [param.userId, onlineUser]);
+
 
   useEffect(() => {
     if (userData) {

@@ -41,14 +41,14 @@ const CardUserSideBar = ({data}) => {
             </div>
             ):(
 
-                <div className={` opacity-80 text-[14px] ${data?.unseenMsg !== 0 ? "text-primary font-semibold" : "text-[gray] "} w-full overflow-ellipsis text-nowrap overflow-hidden`}> {data?.lastMsg?.text}</div>
+                <div className={` opacity-80 text-[14px] ${(data?.unseenMsg !== 0 && data?.lastMsg?.sender === user._id) ? "text-primary font-semibold" : "text-[gray] "} w-full overflow-ellipsis text-nowrap overflow-hidden`}> {data?.lastMsg?.text}</div>
             )
         }
             </div> 
             {
-                data?.unseenMsg === 0 ? "" : (<div className=' bg-primary text-[white] text-[12px] font-bold rounded-full w-6 h-6 flex justify-center items-center p-1'>
+                (data?.unseenMsg !== 0 && data?.lastMsg?.sender === user._id) ? (<div className=' bg-primary text-[white] text-[12px] font-bold rounded-full w-6 h-6 flex justify-center items-center p-1'>
                 {data?.unseenMsg}
-        </div>)
+        </div>):""
             }
             
         </div>
