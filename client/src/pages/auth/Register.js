@@ -18,16 +18,26 @@ const Register = () => {
     e.preventDefault();
 
     try {
-      const dataImage = await uploadFile(data.pic);
-      if (dataImage.url) {
-        const updatedData = {
+      let dataImage
+      if(data.pic !== ""){
+
+        dataImage = await uploadFile(data.pic);
+      }
+
+      let updatedData ={
+        ...data
+      }
+      if (dataImage?.data?.url) {
+         updatedData = {
           ...data,
           pic: dataImage?.data?.url,
         };
-        const response = await baseUrl.post("/api/v1/auth/signup", updatedData);
-        toast.success(response?.data?.message);
-        navigate("/login");
+        
       }
+
+      const response = await baseUrl.post("/api/v1/auth/signup", updatedData);
+      toast.success(response?.data?.message);
+       navigate("/login");
     } catch (error) {
       toast.error(error?.response?.data?.message);
     }
@@ -69,7 +79,7 @@ const Register = () => {
             />
           </label>
           <input
-            required
+           
             type="file"
             id="pic"
             name="pic"
