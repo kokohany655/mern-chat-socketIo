@@ -197,8 +197,8 @@ return
   }, [onlineUser]);
 
   return (
-    <div className=" h-[100vh] relative">
-      <header className="sticky h-16 shadow-md px-4 gap-3 flex justify-between items-center">
+    <div className=" h-[100vh] relative ">
+      <header className="fixed top-0 right-0 w-full bg-[white] z-10 h-16 shadow-md px-4 gap-3 flex justify-between items-center">
         <div className="flex justify-start items-center gap-3">
           <div className="flex justify-center items-center gap-1">
             <Link to="/" className="lg:hidden block cursor-pointer">
@@ -228,7 +228,7 @@ return
           <TbDotsVertical size={"1.3rem"} />
         </div>
       </header>
-      <section className={` ${openEmoji ? "md:h-[calc(100vh-8rem)] h-[calc(100vh-26.5rem)]" : "h-[calc(100vh-8rem)]"}  overflow-x-hidden overflow-y-auto slideBar p-4 relative`}>
+      <section className={` pt-[4.5rem] ${openEmoji ? "md:h-[calc(100vh-8rem)] h-[calc(100vh-24.5rem)]" : "h-[calc(100vh-4rem)]"}  overflow-x-hidden overflow-y-auto slideBar p-4 relative`}>
        <div className=" flex flex-col gap-2">
         {
           allMessage.length >0 && allMessage.map(msg=>(
