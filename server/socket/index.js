@@ -49,7 +49,7 @@ io.on("connection", (socket) => {
       ]
   }).populate('messages').sort({ updatedAt : -1 })
 
-  socket.emit("message" , getConversationMessage.messages)
+  socket.emit("message" , getConversationMessage?.messages || [])
   });
 
   socket.on("new-message", async (data) => {
