@@ -84,7 +84,7 @@ const socketRef = useRef(null)
     }
   };
   return (
-    <div className=" w-full h-full grid md:grid-cols-[48px,1fr]">
+    <div className=" w-full h-full grid md:grid-cols-[48px,1fr] gap-2">
       <div className=" w-12 h-full  shadow-lg md:relative fixed top-0 left-0  rounded-tr-lg rounded-br-lg py-8 bg-primary text-[white] flex flex-col justify-between items-center ">
         <div className=" flex flex-col items-center gap-4">
           <Link to={"/"} className=" text-2xl cursor-pointer">
