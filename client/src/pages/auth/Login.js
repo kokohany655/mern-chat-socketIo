@@ -12,10 +12,8 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const config = {
-        withCredentials: true,
-      };
-      const response = await baseUrl.post("/api/v1/auth/login", data, config);
+     
+      const response = await baseUrl.post("/api/v1/auth/login", data);
       toast.success(response?.data?.message);
       localStorage.setItem("token-chat-forge", response?.data?.token);
       navigate("/");

@@ -50,18 +50,20 @@ const EditUser = ({ setIsModalOpen, isModalOpen, user }) => {
       let updatedData = {
         ...data,
       };
+      const config = {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token-chat-forge")}` },
+      };
       if (!data.pic.startsWith("http")) {
         dataImage = await uploadFile(data.pic);
         updatedData = {
           ...data,
           pic: dataImage?.data?.url,
         };
+       
         const response = await baseUrl.put(
           `/api/v1/user/${user._id}`,
           updatedData,
-          {
-            withCredentials: true,
-          }
+          config
         );
         toast.success(response?.data?.message);
 
@@ -70,9 +72,7 @@ const EditUser = ({ setIsModalOpen, isModalOpen, user }) => {
         const response = await baseUrl.put(
           `/api/v1/user/${user._id}`,
           updatedData,
-          {
-            withCredentials: true,
-          }
+          config
         );
         toast.success(response?.data?.message);
 

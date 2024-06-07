@@ -105,11 +105,6 @@ io.on("connection", (socket) => {
     socket.emit("conversation-sidBar" ,  conversation)
 
   })
-  socket.on("disconnect", () => {
-    onlineUser.delete(userId);
-    io.emit("onlineUser", Array.from(onlineUser));
-
-  });
 
   socket.on("seen" , async(userIdConversationOpen)=>{
     const getConversationId = await Conversion.findOne({
@@ -134,6 +129,14 @@ io.on("connection", (socket) => {
   io.to(userId).emit("conversation-sidBar" , conversationSideBarSender)
   io.to(userIdConversationOpen).emit("conversation-sidBar" , conversationSideBarReceiver)
   })
+
+  socket.on("disconnect", () => {
+    onlineUser.delete(userId);
+    io.emit("onlineUser", Array.from(onlineUser));
+
+  });
+
+ 
 });
 
 module.exports = {

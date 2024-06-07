@@ -8,40 +8,33 @@ import SideBar from "../../components/home/SideBar";
 import logo from "../../images/logo.png";
 import io from "socket.io-client";
 
-
 const Home = () => {
-  const navigate = useNavigate()
-
+  const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
   const socketRef = useRef(null);
 
   useEffect(() => {
-    const getUserDetails = async () => {
-      try {
-      
-        const response = await baseUrl.get("/api/v1/auth/loggedUser", { withCredentials: true });
-        dispatch(setUser(response?.data?.data));
-      } catch (error) {
-        toast.error(error?.response?.data?.error);
-      }
-    };
-
-    getUserDetails();
-
-  }, [dispatch])
-  
-  useEffect(() => {
-    const getToken = localStorage.getItem("token-chat-forge")
-    if(!getToken){
-      navigate('/login')
+    const getToken = localStorage.getItem("token-chat-forge");
+    if (!getToken) {
+      navigate("/login");
+    } else {
+      const getUserDetails = async () => {
+        try {
+          const config = {
+            headers: { Authorization: `Bearer ${getToken}` },
+          };
+          const response = await baseUrl.get("/api/v1/auth/loggedUser", config);
+          dispatch(setUser(response?.data?.data));
+        } catch (error) {
+          toast.error(error?.response?.data?.error);
+        }
+      };
+      getUserDetails();
     }
-  }, [])
+  }, [dispatch, navigate]);
 
   useEffect(() => {
-
-    
-
     if (!socketRef.current) {
       socketRef.current = io(process.env.REACT_APP_BACKEND_API, {
         auth: { token: localStorage.getItem("token-chat-forge") },
@@ -59,28 +52,30 @@ const Home = () => {
         socketRef.current = null;
       }
     };
-  }, []);
+  }, [dispatch]);
 
-  const isRootPath = location.pathname === "/";
+  if (!localStorage.getItem("token-chat-forge")) {
+    return null; // or loading indicator, or redirect to login
+  }
 
   return (
     <div className="grid lg:grid-cols-[300px,1fr] h-screen max-h-">
       <section
         className={`rounded-tr-xl rounded-br-xl shadow-xl ${
-          !isRootPath ? "hidden" : ""
+          location.pathname === "/" ? "" : "hidden"
         } lg:block `}
       >
         <SideBar />
       </section>
-      <section className={`${isRootPath ? "hidden" : "block"} `}>
+      <section className={`${location.pathname === "/" ? "hidden" : "block"} `}>
         <Outlet />
       </section>
       <div
         className={`justify-center items-center ${
-          !isRootPath ? "hidden" : "lg:flex lg:flex-col hidden"
+          location.pathname === "/" ? "hidden" : "lg:flex lg:flex-col hidden"
         } `}
       >
-        <img src={logo} />
+        <img src={logo} alt="logo" />
         <div>select user to send a message</div>
       </div>
     </div>

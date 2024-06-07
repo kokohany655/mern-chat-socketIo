@@ -57,10 +57,7 @@ exports.login = async (req, res, next) => {
       { expiresIn: process.env.JWT_EXPIRES_IN }
     );
 
-    res
-      .cookie("token", token, { httpOnly: true, secure: false ,sameSite: 'None' })
-      .status(200)
-      .json({
+    res.status(200).json({
         message: "Login successful",
         token,
         user: {

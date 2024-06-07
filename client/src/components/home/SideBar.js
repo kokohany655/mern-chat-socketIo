@@ -72,13 +72,10 @@ const socketRef = useRef(null)
   
   const handleLogout = async () => {
     try {
-      const response = await baseUrl.get("/api/v1/auth/logout", {
-        withCredentials: true,
-      });
-
-      toast.success(response?.data?.message);
-      dispatch(logout());
+      
       localStorage.removeItem("token-chat-forge")
+      toast.success("logout successfully");
+     
       navigate("/login");
     } catch (error) {
       toast.success(error?.response?.data?.message);

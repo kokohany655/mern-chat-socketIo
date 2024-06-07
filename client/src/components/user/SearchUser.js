@@ -11,13 +11,14 @@ const SearchUser = ({ setIsSearchModalOpen, isSearchModalOpen }) => {
 
   const handleSearch = async () => {
     try {
+      const config = {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token-chat-forge")}` },
+      };
       setLoading(true);
       const res = await baseUrl.post(
         "/api/v1/user/search-user",
         { search },
-        {
-          withCredentials: true,
-        }
+       config
       );
       if (res?.data?.success) {
         setSearchUser(res?.data?.data);
