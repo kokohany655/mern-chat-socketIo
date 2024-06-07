@@ -84,8 +84,8 @@ const socketRef = useRef(null)
     }
   };
   return (
-    <div className=" w-full h-full grid grid-cols-[48px,1fr]">
-      <div className=" w-12 h-full  shadow-lg  rounded-tr-lg rounded-br-lg py-8 bg-primary text-[white] flex flex-col justify-between items-center ">
+    <div className=" w-full h-full grid md:grid-cols-[48px,1fr]">
+      <div className=" w-12 h-full  shadow-lg md:relative fixed top-0 left-0  rounded-tr-lg rounded-br-lg py-8 bg-primary text-[white] flex flex-col justify-between items-center ">
         <div className=" flex flex-col items-center gap-4">
           <Link to={"/"} className=" text-2xl cursor-pointer">
             <BsChatLeftText />
@@ -112,7 +112,7 @@ const socketRef = useRef(null)
           </div>
         </div>
       </div>
-      <div className="w-full p-3 slideBar overflow-y-auto overflow-x-hidden h-[100vh] flex flex-col gap-4">
+      <div className="w-full p-3 slideBar overflow-y-auto md:pl-0 pl-14 overflow-x-hidden md:h-[100vh] flex flex-col gap-4">
        <p className=" font-semibold">Messages</p>
         
         {allUser.length < 1 ? (
