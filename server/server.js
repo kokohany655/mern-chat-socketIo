@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const cookie = require("cookie-parser");
+const cookieParser = require("cookie-parser");
 const dotenv = require("dotenv");
 
 const { dbConnections } = require("./config/database");
@@ -12,9 +12,9 @@ const userRoute = require("./routes/userRoute");
 const { app, server } = require("./socket/index");
 
 dotenv.config();
-// const app = express();
+
 app.use(express.json());
-app.use(cookie());
+app.use(cookieParser());
 app.use(
   cors({
     origin: process.env.FRONTEND_URL,
@@ -28,8 +28,9 @@ app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/user", userRoute);
 
 app.use(globalError);
+
 const port = process.env.PORT || 8000;
 
 server.listen(port, () => {
-  console.log(`server is running ... ${port}`);
+  console.log(`Server is running on port ${port}`);
 });

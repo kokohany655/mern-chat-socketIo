@@ -58,7 +58,7 @@ exports.login = async (req, res, next) => {
     );
 
     res
-      .cookie("token", token, { httpOnly: false, secure: false })
+      .cookie("token", token, { httpOnly: true, secure: false ,sameSite: 'None' })
       .status(200)
       .json({
         message: "Login successful",
@@ -87,7 +87,7 @@ exports.getIdUserFromToken = (token) => {
 
 exports.getLoggedUser = async (req, res, next) => {
   try {
-    const id = req.user;
+    const id = req?.user;
     const user = await User.findById(id).select("-password");
 
     if (!user) {
