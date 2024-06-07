@@ -19,8 +19,8 @@ const Home = () => {
   useEffect(() => {
     const getUserDetails = async () => {
       try {
-        const config = { withCredentials: true };
-        const response = await baseUrl.get("/api/v1/auth/loggedUser", config);
+      
+        const response = await baseUrl.get("/api/v1/auth/loggedUser", { withCredentials: true });
         dispatch(setUser(response?.data?.data));
       } catch (error) {
         toast.error(error?.response?.data?.error);
