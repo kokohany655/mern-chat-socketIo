@@ -130,12 +130,16 @@ return
 
       setAllUser(conversationUserDate)
     })
-    console.log({allUser})
     if(param.userId){
 
-      const chooseConversation = allUser.filter(e=> e?.receiver?._id === param.userId )
-      console.log({chooseConversation})
-      if(chooseConversation.length > 0){
+      const chooseConversationReceiver = allUser.filter(e=> e?.receiver?._id === param.userId )
+      const chooseConversationSender = allUser.filter(e=> e?.sender?._id === param.userId )
+    
+      if(chooseConversationReceiver.length > 0){
+
+        socketRef.current.emit("seen" , param.userId)
+      }
+      if(chooseConversationSender.length > 0){
 
         socketRef.current.emit("seen" , param.userId)
       }
